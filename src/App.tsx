@@ -7,7 +7,7 @@ import About from "./pages/About";
 
 function App() {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-800 flex flex-col justify-center items-center">
       <BrowserRouter>
         <h1>React-Router-ProgrammaticNavigationApp</h1>
         <Navigation />

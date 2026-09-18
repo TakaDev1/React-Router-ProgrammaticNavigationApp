@@ -1,32 +1,169 @@
-# React + TypeScript + Vite
+# React-Router-ProgrammaticNavigationApp
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React Routerを使用して、ナビゲーションコンポーネントを分離し、`NavLink`による共通ナビゲーションを実装する練習用アプリです。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+`Navigation.tsx`にナビゲーションを分離し、`App.tsx`でルーティングを管理します。
 
-## React Compiler
+`NavLink`の`isActive`を使用して、現在表示しているページのナビゲーションにアクティブ状態を適用します。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 学習内容
 
-## Expanding the Oxlint configuration
+* `BrowserRouter`の使い方
+* `Routes` / `Route`の使い方
+* `NavLink`によるナビゲーション
+* `isActive`によるアクティブ状態の判定
+* Tailwind CSSによる条件付きスタイリング
+* ナビゲーションコンポーネントの分離
+* ページコンポーネントの分離
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 使用技術
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+* React
+* TypeScript
+* React Router
+* Tailwind CSS
+* Vite
+
+## ルーティング
+
+| URL         | ページ      |
+| ----------- | -------- |
+| `/`         | Home     |
+| `/products` | Products |
+| `/about`    | About    |
+
+## ディレクトリ構成
+
+```text
+src/
+├── components/
+│   └── Navigation.tsx
+├── pages/
+│   ├── Home.tsx
+│   ├── Products.tsx
+│   └── About.tsx
+└── App.tsx
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Navigation.tsx
+
+`Navigation.tsx`に`NavLink`を記述し、共通ナビゲーションを作成します。
+
+```tsx
+import { NavLink } from "react-router";
+
+const Navigation = () => {
+  return (
+    <nav>
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive
+            ? "font-bold text-blue-500"
+            : "text-gray-500"
+        }
+      >
+        Home
+      </NavLink>
+
+      <NavLink
+        to="/products"
+        className={({ isActive }) =>
+          isActive
+            ? "font-bold text-blue-500"
+            : "text-gray-500"
+        }
+      >
+        Products
+      </NavLink>
+
+      <NavLink
+        to="/about"
+        className={({ isActive }) =>
+          isActive
+            ? "font-bold text-blue-500"
+            : "text-gray-500"
+        }
+      >
+        About
+      </NavLink>
+    </nav>
+  );
+};
+
+export default Navigation;
+```
+
+## App.tsx
+
+`App.tsx`では`BrowserRouter`、`Routes`、`Route`を使用してルーティングを管理します。
+
+```tsx
+import { BrowserRouter, Route, Routes } from "react-router";
+import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import About from "./pages/About";
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Navigation />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
+```
+
+## アクティブ状態
+
+現在表示しているページの`NavLink`には、
+
+```text
+font-bold
+text-blue-500
+```
+
+を適用します。
+
+それ以外の`NavLink`には、
+
+```text
+text-gray-500
+```
+
+を適用します。
+
+```text
+isActive
+├── true
+│   └── font-bold text-blue-500
+│
+└── false
+    └── text-gray-500
+```
+
+## 起動方法
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+## まとめ
+
+このアプリでは、ナビゲーションとページをそれぞれコンポーネントとして分離し、`App.tsx`でルーティングを管理する構成を学習します。
+
+特に、**「ナビゲーションの責務」と「ルーティングの責務」を分離すること**を目的としています。
